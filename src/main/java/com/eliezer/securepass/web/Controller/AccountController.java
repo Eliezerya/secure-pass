@@ -1,12 +1,16 @@
 package com.eliezer.securepass.web.Controller;
 
 import com.eliezer.securepass.Domain.Account;
+import com.eliezer.securepass.Domain.User;
 import com.eliezer.securepass.Service.AccountService;
+import com.eliezer.securepass.Service.LoginService;
 import com.eliezer.securepass.Service.WebAccountService;
 import com.eliezer.securepass.web.Dto.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,19 @@ public class AccountController {
     AccountService accountService;
 
     WebAccountService webAccountService;
+
+    LoginService loginService;
+
+    @Autowired
+    public void setLoginService(LoginService loginService) {
+        this.loginService = loginService;
+    }
+
+    public Authentication authentication() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth;
+    }
+
 
     @Autowired
     public void setWebAccountService(WebAccountService webAccountService) {
@@ -38,13 +55,20 @@ public class AccountController {
 
     @PostMapping("/user/account")
     public String createAccount(@ModelAttribute("account") Account account) {
-        webAccountService.createAccountWeb(1L, account);
-        return "redirect:/user/" + account.getUser().getId() + "/accounts";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = loginService.findByEmail(currentPrincipalName);
+        webAccountService.createAccountWeb(user.getId(), account);
+        return "redirect:/user/accounts";
     }
 
-    @GetMapping("/user/{userId}/accounts")
-    public String displayAccounts(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("accounts", accountService.displayAccount(userId));
+    @GetMapping("/user/accounts")
+    public String displayAccounts(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = loginService.findByEmail(currentPrincipalName);
+
+        model.addAttribute("accounts", accountService.displayAccount(user.getId()));
         return "home";
     }
 
@@ -58,7 +82,7 @@ public class AccountController {
         account.setDescriptionAccount(accountDto.getDescriptionAccount());
         account.setPasswordAccount(accountDto.getPasswordAccount());
         webAccountService.updateAccountWeb(account);
-        return "redirect:/user/" +account.getUser().getId()+ "/accounts";
+        return "redirect:/user/accounts";
     }
 
     @GetMapping("/user/account/{idAcc}")
