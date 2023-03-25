@@ -101,7 +101,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-
+		<finalName>secure-pass</finalName>
 	</build>
 
 </project>

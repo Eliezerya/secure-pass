@@ -22,6 +22,7 @@ import java.util.List;
 @Slf4j
 public class LoginServiceImpl implements LoginService,UserDetailsService {
 
+    @Autowired
     UserRepository userRepository;
 
     PasswordEncoder passwordEncoder;
@@ -37,12 +38,6 @@ public class LoginServiceImpl implements LoginService,UserDetailsService {
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
