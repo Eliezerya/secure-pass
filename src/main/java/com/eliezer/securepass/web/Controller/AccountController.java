@@ -91,25 +91,5 @@ public class AccountController {
         return "edit_account";
     }
 
-//    @PostMapping("api/v1/user/{userId}/account")
-//    public ResponseEntity<?> createAccount(@PathVariable("userId") Long userId, @RequestBody AccountDto accountDto){
-//        return new ResponseEntity<>(accountService.createAccount(userId,accountDto), HttpStatus.CREATED);
-//    }
-
-    //    @GetMapping("api/v1/user/{userId}/accounts")
-//    public ResponseEntity<?> displayAccounts(@PathVariable("userId") Long userId){
-//        return new ResponseEntity<>(accountService.displayAccount(userId), HttpStatus.CREATED);
-//    }
-
-
-//    @GetMapping("api/v1/user/{userId}/account")
-//    public ResponseEntity<?> displayAccountsByNameAccount(@PathVariable("userId") Long userId,@RequestParam(value = "keyword") String keyword){
-//        return new ResponseEntity<>(accountService.displayAccountByNameAccount(keyword,userId), HttpStatus.OK);
-//    }
-
-//    @PutMapping("api/v1/user/account/{idAcc}")
-//    public ResponseEntity<?> updateAccount(@PathVariable("idAcc") Long idAcc,@RequestBody AccountDto accountDto){
-//        return new ResponseEntity<>(accountService.updateAccount(idAcc,accountDto), HttpStatus.ACCEPTED);
-//    }
 
 }
